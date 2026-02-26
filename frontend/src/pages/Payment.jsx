@@ -95,9 +95,12 @@ const Payment = () => {
               navigate(`/success/${registrationId}`);
             } else {
               setError('Payment verification failed. Please contact support.');
+              setProcessing(false);
             }
           } catch (err) {
+            console.error('Verify payment error:', err);
             setError('Payment verification failed. Please contact support.');
+            setProcessing(false);
           }
         },
         prefill: {

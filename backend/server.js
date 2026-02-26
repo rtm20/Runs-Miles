@@ -194,8 +194,12 @@ app.post('/api/verify-payment', async (req, res) => {
     registration.paidAt = new Date();
     await registration.save();
 
-    // Send confirmation email
-    await sendConfirmationEmail(registration, event);
+    // Send confirmation email (don't block payment verification if email fails)
+    try {
+      await sendConfirmationEmail(registration, event);
+    } catch (emailErr) {
+      console.error('Email sending failed (non-blocking):', emailErr.message);
+    }
 
     res.json({
       success: true,
