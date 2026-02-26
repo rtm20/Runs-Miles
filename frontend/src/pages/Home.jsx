@@ -84,7 +84,7 @@ const Home = () => {
                     </div>
                     <div>
                       <p className="font-bold text-dark">Next Event</p>
-                      <p className="text-sm text-gray-600">Pune Marathon • Coming Soon</p>
+                      <p className="text-sm text-gray-600">Edition 1 • 10 May 2026</p>
                     </div>
                   </div>
                 </div>
@@ -170,8 +170,8 @@ const Home = () => {
                 className="rounded-3xl shadow-2xl"
               />
               <div className="absolute -bottom-8 -left-8 bg-gradient-to-r from-primary to-accent p-6 rounded-2xl text-white shadow-xl">
-                <p className="font-display text-4xl font-bold">100K+</p>
-                <p className="text-sm opacity-90">Runners Trust Us</p>
+                <p className="font-display text-2xl font-bold">Edition 1</p>
+                <p className="text-sm opacity-90">10 May 2026</p>
               </div>
             </div>
           </div>
@@ -222,7 +222,7 @@ const Home = () => {
             Ready to Start Your Running Journey?
           </h2>
           <p className="text-white/90 text-xl mb-8 max-w-2xl mx-auto">
-            Join thousands of runners and be part of India's biggest marathon events. 
+            Be part of the inaugural Run and Miles Marathon — Edition 1 on 10 May 2026.
             Your next milestone awaits!
           </p>
           <Link

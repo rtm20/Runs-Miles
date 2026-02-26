@@ -39,24 +39,24 @@ app.use(express.json());
 const events = [
   {
     id: 1,
-    title: "Pune Marathon",
+    title: "Run and Miles Marathon – Edition 1",
     city: "Pune",
     state: "Maharashtra",
-    date: "",
-    time: "Coming Soon",
+    date: "2026-05-10",
+    time: "5:00 AM IST",
     distance: ["5K", "10K", "21K"],
     registrationFee: {
       "5K": 20,
       "10K": 50,
       "21K": 70
     },
-    description: "Join Pune's biggest running community event! Run through the Oxford of the East past historical sites, scenic parks, and vibrant streets in this cultural marathon.",
+    description: "The inaugural edition of the Run and Miles Marathon — a community-driven race experience designed to promote fitness, health awareness, and the joy of running. Join us at Wadia College Ground, Pune for a professionally managed race with T-shirts, finisher medals, hydration support, and medical assistance. Report 20 minutes prior to the start. Race categories and routes will be announced shortly.",
     image: "https://images.unsplash.com/photo-1594882645126-14020914d58d?w=800",
-    venue: "Pune, Maharashtra",
+    venue: "Wadia College Ground, Pune",
     totalSlots: 5500,
     registeredCount: 0,
-    highlights: ["Finisher Medal", "Heritage Route", "Community Run", "Refreshments"],
-    route: "Shivaji Park → FC Road → JM Road → Shivaji Park",
+    highlights: ["T-shirt", "Finisher Medal", "Bib", "Hydration Support", "Medical Support"],
+    route: "Route will be announced shortly",
     upiId: "7447288206@axl"
   }
 ];
@@ -351,8 +351,10 @@ async function sendConfirmationEmail(registration, event) {
             </div>
             
             <div class="event-info">
-              <h3>📍 Route Information</h3>
-              <p>${event.route}</p>
+              <h3>📍 Venue & Reporting</h3>
+              <p><strong>Venue:</strong> ${event.venue}</p>
+              <p><strong>Reporting Time:</strong> 20 minutes prior to race start</p>
+              <p><strong>Race Start:</strong> ${event.time}</p>
             </div>
             
             <h3>What's Included:</h3>
@@ -360,7 +362,7 @@ async function sendConfirmationEmail(registration, event) {
               ${event.highlights.map(h => `<li>${h}</li>`).join('')}
             </ul>
             
-            <p style="margin-top: 20px;"><strong>Important:</strong> Please arrive at least 1 hour before the event start time for check-in and warm-up.</p>
+            <p style="margin-top: 20px;"><strong>Important:</strong> Please report at least 20 minutes before the race start time for check-in and warm-up.</p>
           </div>
           <div class="footer">
             <p>Keep this email as your registration confirmation.</p>
