@@ -6,7 +6,11 @@ import dotenv from 'dotenv';
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import mongoose from 'mongoose';
+import dns from 'dns';
 import Registration from './models/Registration.js';
+
+// Force IPv4 DNS resolution (fixes SMTP on Render/cloud platforms)
+dns.setDefaultResultOrder('ipv4first');
 
 dotenv.config();
 
@@ -86,6 +90,8 @@ app.post('/api/contact', async (req, res) => {
       host: 'smtp.gmail.com',
       port: 587,
       secure: false,
+      requireTLS: true,
+      family: 4,
       auth: {
         user: process.env.EMAIL_USER || 'runsandmiles1@gmail.com',
         pass: process.env.EMAIL_PASS || 'your-app-password'
@@ -327,6 +333,8 @@ async function sendConfirmationEmail(registration, event) {
     host: 'smtp.gmail.com',
     port: 587,
     secure: false,
+    requireTLS: true,
+    family: 4,
     auth: {
       user: process.env.EMAIL_USER || 'runsandmiles1@gmail.com',
       pass: process.env.EMAIL_PASS || 'your-app-password'
