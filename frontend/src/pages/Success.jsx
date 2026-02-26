@@ -47,7 +47,10 @@ const Success = () => {
   }, [registrationId]);
 
   const formatDate = (dateStr) => {
-    return new Date(dateStr).toLocaleDateString('en-IN', {
+    if (!dateStr) return 'Coming Soon';
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return 'Coming Soon';
+    return d.toLocaleDateString('en-IN', {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
