@@ -85,7 +85,7 @@ const EventDetails = () => {
                   key={d}
                   className="bg-primary text-white text-sm font-semibold px-4 py-1 rounded-full"
                 >
-                  {d}
+                  {d} {event.categoryNames?.[d] || ''}
                 </span>
               ))}
             </div>
@@ -132,22 +132,45 @@ const EventDetails = () => {
               </div>
             </div>
 
-            {/* Highlights */}
+            {/* Per-Category Perks */}
             <div className="card p-8">
               <h2 className="font-display text-2xl font-bold text-dark mb-4 flex items-center">
                 <Award className="w-6 h-6 mr-2 text-primary" />
                 What's Included
               </h2>
-              <div className="grid sm:grid-cols-2 gap-4">
-                {event.highlights.map((highlight, index) => (
-                  <div key={index} className="flex items-center bg-gray-50 rounded-xl p-4">
-                    <div className="bg-primary/10 p-2 rounded-lg mr-3">
-                      <Check className="w-5 h-5 text-primary" />
+              {event.categoryPerks ? (
+                <div className="space-y-6">
+                  {event.distance.map((d) => (
+                    <div key={d}>
+                      <h3 className="font-semibold text-dark mb-3">
+                        {d} {event.categoryNames?.[d] || ''}
+                        <span className="text-primary ml-2">— ₹{event.registrationFee[d].toLocaleString()}</span>
+                      </h3>
+                      <div className="grid sm:grid-cols-2 gap-3">
+                        {event.categoryPerks[d].map((perk, index) => (
+                          <div key={index} className="flex items-center bg-gray-50 rounded-xl p-3">
+                            <div className="bg-primary/10 p-2 rounded-lg mr-3">
+                              <Check className="w-4 h-4 text-primary" />
+                            </div>
+                            <span className="text-gray-700 text-sm font-medium">{perk}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <span className="text-gray-700 font-medium">{highlight}</span>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {event.highlights.map((highlight, index) => (
+                    <div key={index} className="flex items-center bg-gray-50 rounded-xl p-4">
+                      <div className="bg-primary/10 p-2 rounded-lg mr-3">
+                        <Check className="w-5 h-5 text-primary" />
+                      </div>
+                      <span className="text-gray-700 font-medium">{highlight}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Distance Categories */}
@@ -172,6 +195,9 @@ const EventDetails = () => {
                         </span>
                       )}
                     </div>
+                    <p className="text-sm font-medium text-gray-600 mb-1">
+                      {event.categoryNames?.[distance] || ''}
+                    </p>
                     <p className="text-2xl font-bold text-primary">
                       ₹{event.registrationFee[distance].toLocaleString()}
                     </p>

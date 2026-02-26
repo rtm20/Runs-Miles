@@ -39,23 +39,36 @@ app.use(express.json());
 const events = [
   {
     id: 1,
-    title: "Run and Miles Marathon – Edition 1",
+    title: "Runs & Miles Half Marathon First Edition, Pune",
     city: "Pune",
     state: "Maharashtra",
     date: "2026-05-10",
-    time: "5:00 AM IST",
-    distance: ["5K", "10K", "21K"],
-    registrationFee: {
-      "5K": 20,
-      "10K": 50,
-      "21K": 70
+    time: "4:30 AM IST Onwards",
+    distance: ["3K", "5K", "10K", "21.1K"],
+    categoryNames: {
+      "3K": "Fun Run",
+      "5K": "Challenge Run",
+      "10K": "Timed Run",
+      "21.1K": "Half Marathon Timed Run"
     },
-    description: "The inaugural edition of the Run and Miles Marathon — a community-driven race experience designed to promote fitness, health awareness, and the joy of running. Join us at Wadia College Ground, Pune for a professionally managed race with T-shirts, finisher medals, hydration support, and medical assistance. Report 20 minutes prior to the start. Race categories and routes will be announced shortly.",
+    registrationFee: {
+      "3K": 499,
+      "5K": 799,
+      "10K": 1200,
+      "21.1K": 1599
+    },
+    categoryPerks: {
+      "3K": ["T-shirt", "Bib", "Medal", "Refreshment", "Hydration"],
+      "5K": ["T-shirt", "Medal", "Bib", "Refreshment", "E-Certificate", "Hydration"],
+      "10K": ["T-shirt", "Medal", "Timed Bib", "Refreshment", "Hydration", "E-Certificate", "Timing Chip"],
+      "21.1K": ["T-shirt", "Medal", "Timed Bib", "Refreshment", "Hydration", "E-Certificate", "Timing Chip"]
+    },
+    description: "The inaugural edition of the Runs & Miles Half Marathon — a community-driven race experience designed to promote fitness, health awareness, and the joy of running. Join us at Wadia College of Engineering, Pune for a professionally managed race with T-shirts, medals, hydration support, and medical assistance. Report 20 minutes prior to the start.",
     image: "https://images.unsplash.com/photo-1594882645126-14020914d58d?w=800",
-    venue: "Wadia College Ground, Pune",
+    venue: "Wadia College of Engineering, Pune",
     totalSlots: 5500,
     registeredCount: 0,
-    highlights: ["T-shirt", "Finisher Medal", "Bib", "Hydration Support", "Medical Support"],
+    highlights: ["T-shirt", "Finisher Medal", "Bib", "Hydration Support", "Medical Support", "Refreshments"],
     route: "Route will be announced shortly",
     upiId: "7447288206@axl"
   }
@@ -326,7 +339,7 @@ async function sendConfirmationEmail(registration, event) {
               </div>
               <div class="detail-row">
                 <span class="label">Category</span>
-                <span class="value">${registration.distance}</span>
+                <span class="value">${registration.distance} ${event.categoryNames?.[registration.distance] || ''}</span>
               </div>
               <div class="detail-row">
                 <span class="label">Date</span>
@@ -357,9 +370,9 @@ async function sendConfirmationEmail(registration, event) {
               <p><strong>Race Start:</strong> ${event.time}</p>
             </div>
             
-            <h3>What's Included:</h3>
+            <h3>What's Included in Your Category:</h3>
             <ul>
-              ${event.highlights.map(h => `<li>${h}</li>`).join('')}
+              ${(event.categoryPerks?.[registration.distance] || event.highlights).map(h => `<li>${h}</li>`).join('')}
             </ul>
             
             <p style="margin-top: 20px;"><strong>Important:</strong> Please report at least 20 minutes before the race start time for check-in and warm-up.</p>

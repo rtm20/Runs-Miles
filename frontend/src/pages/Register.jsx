@@ -200,7 +200,8 @@ const Register = () => {
                           : 'border-gray-200 hover:border-primary/50'
                       }`}
                     >
-                      <p className="font-bold text-xl text-dark">{distance}</p>
+                      <p className="font-bold text-lg text-dark">{distance}</p>
+                      <p className="text-xs text-gray-500 mb-1">{event.categoryNames?.[distance] || ''}</p>
                       <p className="text-sm text-primary font-medium">
                         ₹{event.registrationFee[distance].toLocaleString()}
                       </p>
@@ -409,7 +410,7 @@ const Register = () => {
               <div className="border-t pt-4 space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Category</span>
-                  <span className="font-semibold text-dark">{selectedDistance || '-'}</span>
+                  <span className="font-semibold text-dark">{selectedDistance ? `${selectedDistance} ${event.categoryNames?.[selectedDistance] || ''}` : '-'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Registration Fee</span>

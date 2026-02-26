@@ -32,7 +32,7 @@ const EventCard = ({ event }) => {
               key={d}
               className="bg-white/90 backdrop-blur-sm text-dark text-xs font-semibold px-3 py-1 rounded-full"
             >
-              {d}
+              {d} {event.categoryNames?.[d] || ''}
             </span>
           ))}
         </div>
