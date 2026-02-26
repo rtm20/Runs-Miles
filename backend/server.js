@@ -83,7 +83,9 @@ app.post('/api/contact', async (req, res) => {
     }
 
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
       auth: {
         user: process.env.EMAIL_USER || 'runsandmiles1@gmail.com',
         pass: process.env.EMAIL_PASS || 'your-app-password'
@@ -322,7 +324,9 @@ async function sendConfirmationEmail(registration, event) {
   // Configure your email transporter
   // For production, use actual SMTP credentials
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
     auth: {
       user: process.env.EMAIL_USER || 'runsandmiles1@gmail.com',
       pass: process.env.EMAIL_PASS || 'your-app-password'
