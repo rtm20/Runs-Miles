@@ -3,6 +3,7 @@ import { Calendar, MapPin, Users, ArrowRight } from 'lucide-react';
 
 const EventCard = ({ event }) => {
   const formatDate = (dateStr) => {
+    if (!dateStr) return 'Coming Soon';
     return new Date(dateStr).toLocaleDateString('en-IN', {
       day: 'numeric',
       month: 'short',
@@ -51,7 +52,7 @@ const EventCard = ({ event }) => {
 
         <div className="flex items-center text-gray-600 mb-4">
           <Calendar className="w-4 h-4 mr-2 text-primary" />
-          <span className="text-sm">{formatDate(event.date)} • {event.time}</span>
+          <span className="text-sm">{event.date ? `${formatDate(event.date)} • ${event.time}` : '🗓️ Coming Soon'}</span>
         </div>
 
         <p className="text-gray-600 text-sm mb-4 line-clamp-2">

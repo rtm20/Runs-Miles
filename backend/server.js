@@ -5,16 +5,23 @@ import { v4 as uuidv4 } from 'uuid';
 import dotenv from 'dotenv';
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
+import mongoose from 'mongoose';
+import Registration from './models/Registration.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
 // Initialize Razorpay
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_your_key_id',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || 'your_key_secret'
+  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_live_SKSI5NYKoZ4ztt',
+  key_secret: process.env.RAZORPAY_KEY_SECRET || 'M5g0OjzKFiGvk2CEO5hvaEaF'
 });
 
 // Middleware
@@ -26,142 +33,31 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// In-memory storage (in production, use a database)
-let registrations = [];
+// Registrations stored in MongoDB via Registration model
 
 // Marathon events data
 const events = [
   {
     id: 1,
-    title: "Mumbai Marathon 2026",
-    city: "Mumbai",
-    state: "Maharashtra",
-    date: "2026-03-15",
-    time: "06:00 AM",
-    distance: ["5K", "10K", "21K", "42K"],
-    registrationFee: {
-      "5K": 20,
-      "10K": 50,
-      "21K": 70,
-      "42K": 70
-    },
-    description: "Join India's biggest marathon event! Experience the spirit of Mumbai as you run through the iconic Marine Drive, Bandra-Worli Sea Link, and the Gateway of India route.",
-    image: "https://images.unsplash.com/photo-1513593771513-7b58b6c4af38?w=800",
-    venue: "Azad Maidan, Mumbai",
-    totalSlots: 5000,
-    registeredCount: 2340,
-    highlights: ["Medal & Certificate", "Refreshments", "Medical Support", "Timing Chip"],
-    route: "Marine Drive → Haji Ali → Bandra-Worli Sea Link → Worli Sea Face → Marine Drive",
-    upiId: "9131086067@axl"
-  },
-  {
-    id: 2,
-    title: "Delhi Half Marathon",
-    city: "Delhi",
-    state: "Delhi",
-    date: "2026-04-20",
-    time: "05:30 AM",
-    distance: ["5K", "10K", "21K"],
-    registrationFee: {
-      "5K": 20,
-      "10K": 50,
-      "21K": 70
-    },
-    description: "Run through the heart of India's capital! The Delhi Half Marathon takes you past historical monuments including India Gate, Rashtrapati Bhavan, and Connaught Place.",
-    image: "https://images.unsplash.com/photo-1587843017574-7e3d20df4c14?w=800",
-    venue: "Jawaharlal Nehru Stadium, Delhi",
-    totalSlots: 8000,
-    registeredCount: 4520,
-    highlights: ["Finisher Medal", "Event T-Shirt", "Breakfast", "Live Entertainment"],
-    route: "JLN Stadium → India Gate → Rajpath → Connaught Place → JLN Stadium",
-    upiId: "9131086067@axl"
-  },
-  {
-    id: 3,
-    title: "Bangalore 10K Challenge",
-    city: "Bangalore",
-    state: "Karnataka",
-    date: "2026-05-10",
-    time: "06:00 AM",
-    distance: ["5K", "10K"],
-    registrationFee: {
-      "5K": 20,
-      "10K": 50
-    },
-    description: "Experience the Garden City like never before! Run through Cubbon Park, MG Road, and the beautiful tree-lined avenues of Bangalore in this exciting morning run.",
-    image: "https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=800",
-    venue: "Cubbon Park, Bangalore",
-    totalSlots: 6000,
-    registeredCount: 3200,
-    highlights: ["Finisher Medal", "Hydration Stations", "Photo Points", "Post-run Yoga"],
-    route: "Cubbon Park → MG Road → Brigade Road → Cubbon Park",
-    upiId: "9131086067@axl"
-  },
-  {
-    id: 4,
-    title: "Chennai Marathon",
-    city: "Chennai",
-    state: "Tamil Nadu",
-    date: "2026-06-08",
-    time: "05:00 AM",
-    distance: ["5K", "10K", "21K", "42K"],
-    registrationFee: {
-      "5K": 20,
-      "10K": 50,
-      "21K": 70,
-      "42K": 70
-    },
-    description: "Run along the beautiful Marina Beach coastline! The Chennai Marathon offers a unique coastal running experience with sea breeze and sunrise views.",
-    image: "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800",
-    venue: "Marina Beach, Chennai",
-    totalSlots: 4500,
-    registeredCount: 1890,
-    highlights: ["Coastal Route", "Sunrise Run", "Local Cuisine", "Cultural Performances"],
-    route: "Marina Beach → San Thome → Adyar → Besant Nagar → Marina Beach",
-    upiId: "9131086067@axl"
-  },
-  {
-    id: 5,
-    title: "Hyderabad Night Run",
-    city: "Hyderabad",
-    state: "Telangana",
-    date: "2026-07-25",
-    time: "08:00 PM",
-    distance: ["5K", "10K"],
-    registrationFee: {
-      "5K": 20,
-      "10K": 50
-    },
-    description: "Experience the City of Pearls under the stars! A unique night running event through the illuminated streets of Hyderabad, passing by Charminar and Hussain Sagar.",
-    image: "https://images.unsplash.com/photo-1461896836934- voices-of-the-silenced?w=800",
-    venue: "Necklace Road, Hyderabad",
-    totalSlots: 3500,
-    registeredCount: 1200,
-    highlights: ["Night Run Experience", "Glow Accessories", "DJ Night", "Food Festival"],
-    route: "Necklace Road → Tank Bund → Charminar Area → Necklace Road",
-    upiId: "9131086067@axl"
-  },
-  {
-    id: 6,
     title: "Pune Marathon",
     city: "Pune",
     state: "Maharashtra",
-    date: "2026-08-15",
-    time: "06:00 AM",
+    date: "",
+    time: "Coming Soon",
     distance: ["5K", "10K", "21K"],
     registrationFee: {
       "5K": 20,
       "10K": 50,
       "21K": 70
     },
-    description: "Celebrate Independence Day with a run through the Oxford of the East! Run past historical sites and educational institutions in this cultural marathon.",
+    description: "Join Pune's biggest running community event! Run through the Oxford of the East past historical sites, scenic parks, and vibrant streets in this cultural marathon.",
     image: "https://images.unsplash.com/photo-1594882645126-14020914d58d?w=800",
-    venue: "Shivaji Park, Pune",
+    venue: "Pune, Maharashtra",
     totalSlots: 5500,
-    registeredCount: 2800,
-    highlights: ["Independence Day Theme", "Heritage Route", "Cultural Program", "Breakfast"],
+    registeredCount: 0,
+    highlights: ["Finisher Medal", "Heritage Route", "Community Run", "Refreshments"],
     route: "Shivaji Park → FC Road → JM Road → Shivaji Park",
-    upiId: "9131086067@axl"
+    upiId: "7447288206@axl"
   }
 ];
 
@@ -192,8 +88,8 @@ app.post('/api/register', async (req, res) => {
     const registrationId = uuidv4();
     const fee = event.registrationFee[distance];
     
-    const registration = {
-      id: registrationId,
+    const registration = new Registration({
+      registrationId,
       eventId: parseInt(eventId),
       eventTitle: event.title,
       name,
@@ -205,11 +101,10 @@ app.post('/api/register', async (req, res) => {
       emergencyContact,
       medicalConditions,
       fee,
-      paymentStatus: 'pending',
-      createdAt: new Date().toISOString()
-    };
+      paymentStatus: 'pending'
+    });
 
-    registrations.push(registration);
+    await registration.save();
 
     res.json({
       success: true,
@@ -232,7 +127,7 @@ app.post('/api/create-order', async (req, res) => {
   try {
     const { registrationId } = req.body;
     
-    const registration = registrations.find(r => r.id === registrationId);
+    const registration = await Registration.findOne({ registrationId });
     if (!registration) {
       return res.status(404).json({ message: 'Registration not found' });
     }
@@ -285,7 +180,7 @@ app.post('/api/verify-payment', async (req, res) => {
     }
 
     // Find and update registration
-    const registration = registrations.find(r => r.id === registrationId);
+    const registration = await Registration.findOne({ registrationId });
     if (!registration) {
       return res.status(404).json({ message: 'Registration not found' });
     }
@@ -296,7 +191,8 @@ app.post('/api/verify-payment', async (req, res) => {
     registration.paymentStatus = 'completed';
     registration.razorpayOrderId = razorpay_order_id;
     registration.razorpayPaymentId = razorpay_payment_id;
-    registration.paidAt = new Date().toISOString();
+    registration.paidAt = new Date();
+    await registration.save();
 
     // Send confirmation email
     await sendConfirmationEmail(registration, event);
@@ -305,7 +201,7 @@ app.post('/api/verify-payment', async (req, res) => {
       success: true,
       message: 'Payment verified successfully!',
       registration: {
-        id: registration.id,
+        id: registration.registrationId,
         eventTitle: registration.eventTitle,
         name: registration.name,
         distance: registration.distance,
@@ -323,7 +219,7 @@ app.post('/api/confirm-payment', async (req, res) => {
   try {
     const { registrationId, transactionId } = req.body;
     
-    const registration = registrations.find(r => r.id === registrationId);
+    const registration = await Registration.findOne({ registrationId });
     if (!registration) {
       return res.status(404).json({ message: 'Registration not found' });
     }
@@ -333,7 +229,8 @@ app.post('/api/confirm-payment', async (req, res) => {
     // Update payment status
     registration.paymentStatus = 'completed';
     registration.transactionId = transactionId;
-    registration.paidAt = new Date().toISOString();
+    registration.paidAt = new Date();
+    await registration.save();
 
     // Send confirmation email
     await sendConfirmationEmail(registration, event);
@@ -342,7 +239,7 @@ app.post('/api/confirm-payment', async (req, res) => {
       success: true,
       message: 'Payment confirmed and email sent!',
       registration: {
-        id: registration.id,
+        id: registration.registrationId,
         eventTitle: registration.eventTitle,
         name: registration.name,
         distance: registration.distance,
@@ -356,8 +253,8 @@ app.post('/api/confirm-payment', async (req, res) => {
 });
 
 // Get registration details
-app.get('/api/registration/:id', (req, res) => {
-  const registration = registrations.find(r => r.id === req.params.id);
+app.get('/api/registration/:id', async (req, res) => {
+  const registration = await Registration.findOne({ registrationId: req.params.id });
   if (!registration) {
     return res.status(404).json({ message: 'Registration not found' });
   }
@@ -373,13 +270,13 @@ async function sendConfirmationEmail(registration, event) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.EMAIL_USER || 'your-email@gmail.com',
+      user: process.env.EMAIL_USER || 'runsandmiles.co@gmail.com',
       pass: process.env.EMAIL_PASS || 'your-app-password'
     }
   });
 
   const mailOptions = {
-    from: '"Runs and Miles" <noreply@runsandmiles.com>',
+    from: '"Runs and Miles" <runsandmiles.co@gmail.com>',
     to: registration.email,
     subject: `Registration Confirmed - ${event.title}`,
     html: `
@@ -415,7 +312,7 @@ async function sendConfirmationEmail(registration, event) {
             <h2>Congratulations, ${registration.name}!</h2>
             <p>Your registration for <strong>${event.title}</strong> has been confirmed. Get ready to run!</p>
             
-            <div class="bib-number">BIB #${registration.id.slice(0, 6).toUpperCase()}</div>
+            <div class="bib-number">BIB #${registration.registrationId.slice(0, 6).toUpperCase()}</div>
             
             <div class="details">
               <h3>Registration Details</h3>

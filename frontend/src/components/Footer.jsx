@@ -20,8 +20,8 @@ const Footer = () => {
               </div>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Organizing premium marathon events across India. Join thousands of runners 
-              in experiencing the joy of running through India's most beautiful cities.
+              Pune's newest running community where miles meet movement. From marathon training
+              to weekend group runs, we bring runners together on and off the track.
             </p>
           </div>
 
@@ -46,40 +46,20 @@ const Footer = () => {
           <div>
             <h3 className="font-display font-semibold text-lg mb-6">Marathon Cities</h3>
             <ul className="space-y-3">
-              {['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Hyderabad', 'Pune'].map((city) => (
-                <li key={city}>
-                  <Link 
-                    to="/events" 
-                    className="text-gray-400 hover:text-primary transition-colors flex items-center"
-                  >
-                    <MapPin className="w-4 h-4 mr-2 text-primary" />
-                    {city}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link 
+                  to="/events" 
+                  className="text-gray-400 hover:text-primary transition-colors flex items-center"
+                >
+                  <MapPin className="w-4 h-4 mr-2 text-primary" />
+                  Pune
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Social Links */}
           <div>
-            <h3 className="font-display font-semibold text-lg mb-6">Contact Us</h3>
-            <ul className="space-y-4">
-              <li className="flex items-start">
-                <Mail className="w-5 h-5 text-primary mr-3 mt-1" />
-                <span className="text-gray-400">contact@runsandmiles.com</span>
-              </li>
-              <li className="flex items-start">
-                <Phone className="w-5 h-5 text-primary mr-3 mt-1" />
-                <span className="text-gray-400">+91 98765 43210</span>
-              </li>
-              <li className="flex items-start">
-                <MapPin className="w-5 h-5 text-primary mr-3 mt-1" />
-                <span className="text-gray-400">
-                  123 Runner's Lane, Sports Complex<br />
-                  Mumbai, Maharashtra 400001
-                </span>
-              </li>
-            </ul>
 
             {/* Social Links */}
             <div className="flex space-x-4 mt-6">

@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, Trophy, Users, MapPin, Calendar, Star, ArrowRight } from 'lucide-react';
+import { 
+  ChevronRight, Trophy, Users, MapPin, Calendar, ArrowRight,
+  Heart, Dumbbell, Coffee, Target, Handshake, Sun, Network, Mail, Phone
+} from 'lucide-react';
 import EventCard from '../components/EventCard';
 import { API_URL } from '../config';
 
@@ -23,36 +26,6 @@ const Home = () => {
     fetchEvents();
   }, []);
 
-  const stats = [
-    { icon: Trophy, value: '50+', label: 'Events Organized' },
-    { icon: Users, value: '100K+', label: 'Happy Runners' },
-    { icon: MapPin, value: '25+', label: 'Cities Covered' },
-    { icon: Calendar, value: '5+', label: 'Years Experience' },
-  ];
-
-  const testimonials = [
-    {
-      name: 'Priya Sharma',
-      location: 'Mumbai',
-      image: 'https://randomuser.me/api/portraits/women/44.jpg',
-      text: 'Amazing experience! The organization was flawless and the route was beautiful. Can\'t wait for the next one!',
-      rating: 5
-    },
-    {
-      name: 'Rahul Verma',
-      location: 'Delhi',
-      image: 'https://randomuser.me/api/portraits/men/32.jpg',
-      text: 'Best marathon event I\'ve participated in. Great hydration stations and medical support throughout.',
-      rating: 5
-    },
-    {
-      name: 'Anita Desai',
-      location: 'Bangalore',
-      image: 'https://randomuser.me/api/portraits/women/68.jpg',
-      text: 'The medal quality and the post-event arrangements were excellent. Highly recommend Runs and Miles!',
-      rating: 5
-    }
-  ];
 
   return (
     <div className="overflow-hidden">
@@ -73,13 +46,15 @@ const Home = () => {
               </div>
               
               <h1 className="font-display text-5xl md:text-7xl font-bold leading-tight mb-6">
-                Run Through<br />
-                <span className="gradient-text">India's Heart</span>
+                Run where<br />
+                <span className="gradient-text">stories live.</span>
               </h1>
               
-              <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-                Join thousands of passionate runners in India's most exciting marathon events. 
-                From coastal roads to historical monuments, experience running like never before.
+              <p className="text-xl text-gray-300 mb-4 leading-relaxed">
+                Trade your treadmill views for sunrises over coastlines, finish lines near historic landmarks, and the thrill of thousands chasing the same goal as you.
+              </p>
+              <p className="text-lg text-primary font-semibold mb-8">
+                Your next starting line is waiting…are you in?
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -92,16 +67,7 @@ const Home = () => {
                 </a>
               </div>
 
-              {/* Quick Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 pt-12 border-t border-white/20">
-                {stats.map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <stat.icon className="w-8 h-8 mx-auto mb-2 text-primary" />
-                    <p className="font-display text-3xl font-bold">{stat.value}</p>
-                    <p className="text-sm text-gray-400">{stat.label}</p>
-                  </div>
-                ))}
-              </div>
+
             </div>
 
             <div className="relative hidden lg:block">
@@ -118,7 +84,7 @@ const Home = () => {
                     </div>
                     <div>
                       <p className="font-bold text-dark">Next Event</p>
-                      <p className="text-sm text-gray-600">Mumbai Marathon • Mar 15</p>
+                      <p className="text-sm text-gray-600">Pune Marathon • Coming Soon</p>
                     </div>
                   </div>
                 </div>
@@ -140,7 +106,7 @@ const Home = () => {
               Upcoming <span className="gradient-text">Events</span>
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Register for our upcoming marathon events across India. Early bird discounts available!
+              Check out the upcoming events of the club and weekend runs. Stay updated with what's happening next!
             </p>
           </div>
 
@@ -177,39 +143,30 @@ const Home = () => {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="section-title mb-6">
-                Why Choose<br />
-                <span className="gradient-text">Runs and Miles?</span>
+                About<br />
+                <span className="gradient-text">Runs and Miles</span>
               </h2>
-              <p className="text-gray-600 mb-8 leading-relaxed">
-                We're not just organizing races; we're creating experiences that inspire 
-                and transform. Every event is meticulously planned to ensure runners of 
-                all levels have an unforgettable experience.
+              <p className="text-gray-600 mb-4 leading-relaxed">
+                Welcome to Pune's newest running community where miles meet movement.
               </p>
-
-              <div className="space-y-6">
-                {[
-                  { title: 'Expert Organization', desc: 'Professional event management with 5+ years experience' },
-                  { title: 'Scenic Routes', desc: 'Carefully selected routes through India\'s most beautiful locations' },
-                  { title: 'Safety First', desc: 'Comprehensive medical support and safety measures throughout' },
-                  { title: 'Community Spirit', desc: 'Join a thriving community of passionate runners' }
-                ].map((item, index) => (
-                  <div key={index} className="flex items-start">
-                    <div className="bg-primary/10 p-2 rounded-lg mr-4 mt-1">
-                      <ChevronRight className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-dark">{item.title}</h4>
-                      <p className="text-gray-600 text-sm">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <p className="text-gray-600 mb-4 leading-relaxed">
+                We're more than just a running club. From structured marathon training programs and race preparation to weekend group runs, recovery sessions, mobility workshops, and community fitness activities, we bring runners together both on and off the track.
+              </p>
+              <p className="text-gray-600 mb-4 leading-relaxed">
+                Whether you're gearing up for your first 5K or preparing for your next full marathon, Runs and Miles is your space to train smarter, stay consistent, and enjoy the journey with like-minded runners across the city.
+              </p>
+              <p className="text-primary font-bold text-lg mb-4">
+                Run. Recover. Connect. Repeat.
+              </p>
+              <p className="text-gray-600 leading-relaxed">
+                Join us as we train for finish lines and build a stronger running culture in Pune.
+              </p>
             </div>
 
             <div className="relative">
               <img
                 src="https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=800"
-                alt="Marathon Event"
+                alt="Running Community"
                 className="rounded-3xl shadow-2xl"
               />
               <div className="absolute -bottom-8 -left-8 bg-gradient-to-r from-primary to-accent p-6 rounded-2xl text-white shadow-xl">
@@ -221,43 +178,42 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* What We Offer Section */}
       <section className="py-20 bg-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="section-title mb-4">
-              What Runners <span className="gradient-text">Say</span>
+              What We <span className="gradient-text">Offer</span>
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Don't just take our word for it. Hear from runners who've experienced our events.
+              More than just running — we build experiences that keep you moving.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-2xl p-8 shadow-lg">
-                <div className="flex items-center mb-6">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="w-14 h-14 rounded-full object-cover mr-4"
-                  />
-                  <div>
-                    <h4 className="font-semibold text-dark">{testimonial.name}</h4>
-                    <p className="text-sm text-gray-500">{testimonial.location}</p>
-                  </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: Handshake, title: 'Social Running Circles', desc: 'Meet like-minded runners through curated group runs, pace-based pods, and post-run hangouts designed to help you build real connections — not just mileage.' },
+              { icon: Sun, title: 'Happening Weekends', desc: 'From themed fun runs and coffee meetups to sunset jogs, trail adventures, and fitness socials — our weekends are built to keep your routine exciting and consistent.' },
+              { icon: Dumbbell, title: 'Smart Fitness Experiences', desc: 'Join mobility workshops, recovery sessions, strength clinics, and guided marathon prep programs designed to improve performance beyond just running.' },
+              { icon: Users, title: 'Community Connections', desc: 'Network with fitness enthusiasts, professionals, and local runners who share your goals — making every run an opportunity to grow your circle.' },
+              { icon: Heart, title: 'Active Lifestyle Events', desc: 'Be part of bootcamps, yoga-for-runners, breathing sessions, and wellness activities that complement your training journey.' },
+              { icon: Target, title: 'Goal-Focused Training Pods', desc: "Train with runners who share your race goals — whether it's your first 5K or a full marathon — through structured and supportive training groups." },
+              { icon: Coffee, title: 'Run & Connect Meetups', desc: 'Cool down after your runs with community brunches, coffee catch-ups, and fitness discussions that make staying active a social experience.' },
+              { icon: Network, title: 'Runner Networking', desc: "Connect with Pune's growing fitness community through collaborative events, partner activities, and club socials." }
+            ].map((item, index) => (
+              <div key={index} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="bg-primary/10 p-3 rounded-xl w-fit mb-4">
+                  <item.icon className="w-6 h-6 text-primary" />
                 </div>
-                <div className="flex mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-600 italic">"{testimonial.text}"</p>
+                <h4 className="font-display font-semibold text-dark text-lg mb-2">{item.title}</h4>
+                <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
+
+
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-primary to-accent">
@@ -295,11 +251,29 @@ const Home = () => {
               <div className="space-y-6">
                 <div className="flex items-center">
                   <div className="bg-primary/10 p-3 rounded-xl mr-4">
+                    <Mail className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-dark">Email</p>
+                    <p className="text-gray-600">runsandmiles.co@gmail.com</p>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <div className="bg-primary/10 p-3 rounded-xl mr-4">
+                    <Phone className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-dark">Phone</p>
+                    <p className="text-gray-600">+91 74472 88206</p>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <div className="bg-primary/10 p-3 rounded-xl mr-4">
                     <MapPin className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <p className="font-semibold text-dark">Address</p>
-                    <p className="text-gray-600">123 Runner's Lane, Mumbai 400001</p>
+                    <p className="font-semibold text-dark">Location</p>
+                    <p className="text-gray-600">Pune, Maharashtra, India</p>
                   </div>
                 </div>
                 <div className="flex items-center">

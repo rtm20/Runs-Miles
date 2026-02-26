@@ -53,6 +53,7 @@ const EventDetails = () => {
   }
 
   const formatDate = (dateStr) => {
+    if (!dateStr) return 'Coming Soon';
     return new Date(dateStr).toLocaleDateString('en-IN', {
       weekday: 'long',
       day: 'numeric',
