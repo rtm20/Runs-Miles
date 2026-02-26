@@ -1,16 +1,12 @@
 import express from 'express';
 import cors from 'cors';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import { v4 as uuidv4 } from 'uuid';
 import dotenv from 'dotenv';
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import mongoose from 'mongoose';
-import dns from 'dns';
 import Registration from './models/Registration.js';
-
-// Force IPv4 DNS resolution (fixes SMTP on Render/cloud platforms)
-dns.setDefaultResultOrder('ipv4first');
 
 dotenv.config();
 
@@ -86,20 +82,10 @@ app.post('/api/contact', async (req, res) => {
       return res.status(400).json({ success: false, message: 'All fields are required' });
     }
 
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false,
-      requireTLS: true,
-      family: 4,
-      auth: {
-        user: process.env.EMAIL_USER || 'runsandmiles1@gmail.com',
-        pass: process.env.EMAIL_PASS || 'your-app-password'
-      }
-    });
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-    await transporter.sendMail({
-      from: `"Runs and Miles Contact" <runsandmiles1@gmail.com>`,
+    await resend.emails.send({
+      from: 'Runs and Miles <onboarding@resend.dev>',
       to: 'runsandmiles1@gmail.com',
       replyTo: email,
       subject: `Contact Form: ${name}`,
@@ -327,22 +313,10 @@ app.get('/api/registration/:id', async (req, res) => {
 
 // Email sending function
 async function sendConfirmationEmail(registration, event) {
-  // Configure your email transporter
-  // For production, use actual SMTP credentials
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    requireTLS: true,
-    family: 4,
-    auth: {
-      user: process.env.EMAIL_USER || 'runsandmiles1@gmail.com',
-      pass: process.env.EMAIL_PASS || 'your-app-password'
-    }
-  });
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   const mailOptions = {
-    from: '"Runs and Miles" <runsandmiles1@gmail.com>',
+    from: 'Runs and Miles <onboarding@resend.dev>',
     to: registration.email,
     subject: `Registration Confirmed - ${event.title}`,
     html: `
@@ -437,7 +411,7 @@ async function sendConfirmationEmail(registration, event) {
   };
 
   try {
-    await transporter.sendMail(mailOptions);
+    await resend.emails.send(mailOptions);
     console.log('Confirmation email sent to:', registration.email);
   } catch (error) {
     console.error('Email sending failed:', error);
