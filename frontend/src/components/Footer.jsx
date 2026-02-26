@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MapPin, Mail, Phone, Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
+import { MapPin, Mail, Phone, Instagram } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -60,19 +60,16 @@ const Footer = () => {
 
           {/* Social Links */}
           <div>
-
-            {/* Social Links */}
-            <div className="flex space-x-4 mt-6">
-              {[Facebook, Instagram, Twitter, Youtube].map((Icon, index) => (
-                <a
-                  key={index}
-                  href="#"
-                  className="bg-white/10 p-2 rounded-lg hover:bg-primary transition-colors"
-                >
-                  <Icon className="w-5 h-5" />
-                </a>
-              ))}
-            </div>
+            <h3 className="font-display font-semibold text-lg mb-6">Follow Us</h3>
+            <a
+              href="https://www.instagram.com/runs._and._miles?igsh=bDJ4YXVnb3hkdDh0"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-3 bg-white/10 px-4 py-3 rounded-xl hover:bg-primary transition-colors"
+            >
+              <Instagram className="w-6 h-6" />
+              <span className="text-sm font-medium">@runs._and._miles</span>
+            </a>
           </div>
         </div>
 

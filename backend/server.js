@@ -74,6 +74,43 @@ const events = [
   }
 ];
 
+// Contact form endpoint
+app.post('/api/contact', async (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+    if (!name || !email || !message) {
+      return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER || 'runsandmiles1@gmail.com',
+        pass: process.env.EMAIL_PASS || 'your-app-password'
+      }
+    });
+
+    await transporter.sendMail({
+      from: `"Runs and Miles Contact" <runsandmiles1@gmail.com>`,
+      to: 'runsandmiles1@gmail.com',
+      replyTo: email,
+      subject: `Contact Form: ${name}`,
+      html: `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+      `
+    });
+
+    res.json({ success: true, message: 'Message sent successfully' });
+  } catch (error) {
+    console.error('Contact form error:', error);
+    res.status(500).json({ success: false, message: 'Failed to send message' });
+  }
+});
+
 // Get all events
 app.get('/api/events', (req, res) => {
   res.json(events);
@@ -287,13 +324,13 @@ async function sendConfirmationEmail(registration, event) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.EMAIL_USER || 'runsandmiles.co@gmail.com',
+      user: process.env.EMAIL_USER || 'runsandmiles1@gmail.com',
       pass: process.env.EMAIL_PASS || 'your-app-password'
     }
   });
 
   const mailOptions = {
-    from: '"Runs and Miles" <runsandmiles.co@gmail.com>',
+    from: '"Runs and Miles" <runsandmiles1@gmail.com>',
     to: registration.email,
     subject: `Registration Confirmed - ${event.title}`,
     html: `

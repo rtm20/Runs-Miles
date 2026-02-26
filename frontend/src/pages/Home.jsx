@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ChevronRight, Trophy, Users, MapPin, Calendar, ArrowRight,
-  Heart, Dumbbell, Coffee, Target, Handshake, Sun, Network, Mail, Phone
+  Heart, Dumbbell, Coffee, Target, Handshake, Sun, Network, Mail, Phone, CheckCircle, Loader2
 } from 'lucide-react';
 import EventCard from '../components/EventCard';
 import { API_URL } from '../config';
@@ -10,6 +10,34 @@ import { API_URL } from '../config';
 const Home = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' });
+  const [contactStatus, setContactStatus] = useState(''); // '', 'sending', 'sent', 'error'
+  const [contactError, setContactError] = useState('');
+
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
+    if (!contactForm.name || !contactForm.email || !contactForm.message) return;
+    setContactStatus('sending');
+    setContactError('');
+    try {
+      const res = await fetch(`${API_URL}/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contactForm)
+      });
+      const data = await res.json();
+      if (data.success) {
+        setContactStatus('sent');
+        setContactForm({ name: '', email: '', message: '' });
+        setTimeout(() => setContactStatus(''), 5000);
+      } else {
+        throw new Error(data.message || 'Failed to send');
+      }
+    } catch (err) {
+      setContactStatus('error');
+      setContactError(err.message || 'Something went wrong');
+    }
+  };
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -255,7 +283,7 @@ const Home = () => {
                   </div>
                   <div>
                     <p className="font-semibold text-dark">Email</p>
-                    <p className="text-gray-600">runsandmiles.co@gmail.com</p>
+                    <p className="text-gray-600">runsandmiles1@gmail.com</p>
                   </div>
                 </div>
                 <div className="flex items-center">
@@ -289,35 +317,61 @@ const Home = () => {
             </div>
 
             <div className="bg-light rounded-2xl p-8">
-              <form className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-dark mb-2">Name</label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition"
-                    placeholder="Your name"
-                  />
+              {contactStatus === 'sent' ? (
+                <div className="flex flex-col items-center justify-center h-full py-12">
+                  <CheckCircle className="w-16 h-16 text-green-500 mb-4" />
+                  <h3 className="font-display text-xl font-bold text-dark mb-2">Message Sent!</h3>
+                  <p className="text-gray-600 text-center">Thanks for reaching out. We'll get back to you soon.</p>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-dark mb-2">Email</label>
-                  <input
-                    type="email"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition"
-                    placeholder="your@email.com"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-dark mb-2">Message</label>
-                  <textarea
-                    rows="4"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition resize-none"
-                    placeholder="Your message..."
-                  />
-                </div>
-                <button type="submit" className="btn-primary w-full">
-                  Send Message
-                </button>
-              </form>
+              ) : (
+                <form className="space-y-6" onSubmit={handleContactSubmit}>
+                  {contactStatus === 'error' && (
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-red-700 text-sm">
+                      {contactError || 'Failed to send message. Please try again.'}
+                    </div>
+                  )}
+                  <div>
+                    <label className="block text-sm font-medium text-dark mb-2">Name</label>
+                    <input
+                      type="text"
+                      value={contactForm.name}
+                      onChange={(e) => setContactForm(f => ({ ...f, name: e.target.value }))}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition"
+                      placeholder="Your name"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-dark mb-2">Email</label>
+                    <input
+                      type="email"
+                      value={contactForm.email}
+                      onChange={(e) => setContactForm(f => ({ ...f, email: e.target.value }))}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition"
+                      placeholder="your@email.com"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-dark mb-2">Message</label>
+                    <textarea
+                      rows="4"
+                      value={contactForm.message}
+                      onChange={(e) => setContactForm(f => ({ ...f, message: e.target.value }))}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition resize-none"
+                      placeholder="Your message..."
+                      required
+                    />
+                  </div>
+                  <button type="submit" disabled={contactStatus === 'sending'} className="btn-primary w-full flex items-center justify-center disabled:opacity-50">
+                    {contactStatus === 'sending' ? (
+                      <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Sending...</>
+                    ) : (
+                      'Send Message'
+                    )}
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         </div>

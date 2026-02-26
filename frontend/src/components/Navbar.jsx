@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState, useCallback } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, MapPin } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -17,6 +18,32 @@ const Navbar = () => {
     if (path.startsWith('/#')) return false;
     return location.pathname === path;
   };
+
+  const handleNavClick = useCallback((e, link) => {
+    if (link.path.startsWith('/#')) {
+      e.preventDefault();
+      const sectionId = link.path.replace('/#', '');
+
+      if (location.pathname === '/') {
+        // Already on home page — just scroll
+        const el = document.getElementById(sectionId);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        // Navigate to home first, then scroll after render
+        navigate('/');
+        setTimeout(() => {
+          const el = document.getElementById(sectionId);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    } else if (link.path === '/') {
+      // Home link — scroll to top if already on home
+      if (location.pathname === '/') {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  }, [location.pathname, navigate]);
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
@@ -41,6 +68,7 @@ const Navbar = () => {
               <Link
                 key={link.name}
                 to={link.path}
+                onClick={(e) => handleNavClick(e, link)}
                 className={`font-medium transition-colors duration-300 ${
                   isActive(link.path)
                     ? 'text-primary'
@@ -85,7 +113,7 @@ const Navbar = () => {
                     ? 'bg-primary/10 text-primary'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => { handleNavClick(e, link); setIsOpen(false); }}
               >
                 {link.name}
               </Link>
